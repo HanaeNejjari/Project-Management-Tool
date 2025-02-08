@@ -33,16 +33,18 @@ mat-card-content p {
   color: #757575;
 }
 
-.bouton {
+mat-form-field {
+  width: 100%;
+  display: block;
+  margin-bottom: 15px;
+}
 
+.bouton {
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 16px;
-  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 15px;
 }
 
 button {
-  flex: 1;
-  max-width: 45%;
+  width: 100%;
 }
