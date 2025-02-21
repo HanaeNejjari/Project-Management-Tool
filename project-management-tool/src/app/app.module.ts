@@ -13,6 +13,7 @@ import {MatInput} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatIcon} from '@angular/material/icon';
 import { HomeComponent } from './home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { HomeComponent } from './home/home.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatIcon,
-    MatIconButton
+    MatIconButton,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
