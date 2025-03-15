@@ -3,64 +3,64 @@ CREATE DATABASE project_management_tool;
 USE project_management_tool;
 
 -- Table Utilisateur
-CREATE TABLE Utilisateur (
+CREATE TABLE utilisateur (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    nomUtilisateur VARCHAR(100) NOT NULL,
+    nom_utilisateur VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    motDePasse VARCHAR(255) NOT NULL
+    mot_de_passe VARCHAR(255) NOT NULL
 );
 
 -- Table Projet
-CREATE TABLE Projet (
+CREATE TABLE projet (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
-    description TEXT,
-    dateDebut DATE NOT NULL
+    projet_desc TEXT,
+    date_debut DATE NOT NULL
 );
 
 -- Table Rôle
-CREATE TABLE Rôle (
+CREATE TABLE role_utilisateur (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     libelle VARCHAR(50) NOT NULL,
-    identifiantUtilisateur INTEGER NOT NULL,
-    identifiantProjet INTEGER NOT NULL,
-    FOREIGN KEY (identifiantUtilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE,
-    FOREIGN KEY (identifiantProjet) REFERENCES Projet(id) ON DELETE CASCADE
+    id_utilisateur INTEGER NOT NULL,
+    id_projet INTEGER NOT NULL,
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_projet) REFERENCES projet(id) ON DELETE CASCADE
 );
 
 -- Table Tâche
-CREATE TABLE Tâche (
+CREATE TABLE tache (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
-    description TEXT,
-    dateEcheance DATE,
+    tache_desc TEXT,
+    date_echeance DATE,
     priorite VARCHAR(50),
-    dateFin DATE,
+    date_fin DATE,
     statut VARCHAR(50),
-    idProjet INTEGER NOT NULL,
-    idUtilisateur INTEGER NOT NULL,
-    FOREIGN KEY (idProjet) REFERENCES Projet(id) ON DELETE CASCADE,
-    FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE
+    id_projet INTEGER NOT NULL,
+    id_utilisateur INTEGER NOT NULL,
+    FOREIGN KEY (id_projet) REFERENCES projet(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE
 );
 
 -- Table HistoriqueModifications
-CREATE TABLE HistoriqueModifications (
+CREATE TABLE historique_modif (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    dateModification DATE NOT NULL,
-    champsModifies VARCHAR(100),
-    ancienneValeur TEXT,
-    nouvelleValeur TEXT,
-    idTache INTEGER NOT NULL,
-    FOREIGN KEY (idTache) REFERENCES Tâche(id) ON DELETE CASCADE
+    date_modification DATE NOT NULL,
+    champ_modifie VARCHAR(100),
+    ancienne_valeur TEXT,
+    nouvelle_valeur TEXT,
+    id_tache INTEGER NOT NULL,
+    FOREIGN KEY (id_tache) REFERENCES tache(id) ON DELETE CASCADE
 );
 
 -- Table Notification
-CREATE TABLE Notification (
+CREATE TABLE notification (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     contenu TEXT NOT NULL,
-    dateEnvoi DATE NOT NULL,
-    typeNotification VARCHAR(50),
-    idUtilisateur INTEGER NOT NULL,
-    FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE
+    date_envoi DATE NOT NULL,
+    type_notification VARCHAR(50),
+    id_utilisateur INTEGER NOT NULL,
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE
 );
 

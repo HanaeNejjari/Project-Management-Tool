@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../../service/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,14 +11,30 @@ import {FormControl, Validators} from '@angular/forms';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  email = new FormControl('', [Validators.required, Validators.email]);
+  loginForm: FormGroup;
+  errorMessage: string = '';
   hide = true;
 
-  getErrorMessage() {
-    if (this.email.hasError('required')) {
-      return 'Veuillez renseigner votre adresse mail';
+  constructor(private  fb: FormBuilder,private userService: UserService, private router: Router) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    })
+  }
+
+  onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
     }
 
-    return this.email.hasError('email') ? 'Adresse mail invalide' : '';
+    const { email, password } = this.loginForm.value;
+
+    this.userService.login(email, password).subscribe(token => {
+      this.userService.setToken(token);
+      this.router.navigate(['/home']);
+    },
+      (error) => {
+      console.log('login failed', error);
+      })
   }
 }

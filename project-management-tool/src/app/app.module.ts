@@ -14,6 +14,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatIcon} from '@angular/material/icon';
 import { HomeComponent } from './home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     MatIcon,
     MatIconButton,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
