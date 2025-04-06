@@ -31,11 +31,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public boolean registerUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@RequestBody User user){
         if (userService.isUserExist(user.getEmail())){
-            return false;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
         }
-        return userService.createUser(user) != null;
+        User newUser = userService.createUser(user);
+
+        String token = jwtService.generateToken(newUser);
+        return ResponseEntity.ok(token);
 
     }
     @PostMapping("/login")

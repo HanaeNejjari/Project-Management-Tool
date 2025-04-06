@@ -41,19 +41,13 @@ export class RegisterComponent {
         this.errorMessage = 'Un utilisateur avec cet email existe déjà !';
         return;
       }
-        this.userService.register(userName, email, password).subscribe({
-          next: (isRegistered: boolean) => {
-            if (isRegistered) {
-              console.log('Inscription réussie');
-              this.router.navigate(['/home']);
-            } else {
-              this.errorMessage = 'Une erreur est survenue !';
-            }
 
-          },
-          error: (err) => {
-            console.log('Erreur lors de l\' inscription', err);
-          }
+      this.userService.register(userName, email, password).subscribe( token => {
+        this.userService.setToken(token);
+        this.router.navigate(['/home']);
+      },
+        (error) => {
+        console.log('register failed', error);
         })
     });
   }
