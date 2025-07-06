@@ -27,6 +27,45 @@
             </div>
           </div>
         </mat-card-header>
+
+<!--Liste des taches-->
+        <mat-card-content>
+          <button mat-raised-button *ngIf="userRole === 'Administrateur' || userRole === 'Membre'" (click)="createTache()" >Nouvelle tâche</button>
+          <mat-accordion>
+            <div *ngFor="let t of tachesList; let i = index">
+              <ng-container *ngIf="editedTacheId !== t.id; else editTask">
+                <mat-expansion-panel>
+
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>{{ t.nom }}</mat-panel-title>
+                    <mat-panel-description>
+                      <div class="prio-statut">
+                        <span>Priorité :</span>
+                        <mat-chip [ngClass]="'priorite-' + normalize(t.priorite)">
+                          {{ t.priorite }}
+                        </mat-chip>
+                        <span>Statut :</span>
+                        <mat-chip [ngClass]="'statut-' + normalize(t.statut)">
+                          {{ t.statut }}
+                        </mat-chip>
+                        <button mat-icon-button *ngIf="userRole === 'Administrateur' || userRole === 'Membre'" (click)="startEditTache(t)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </div>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  Responsable : <mat-chip color="accent">{{ getUserEmail(t.idUtilisateur) }}</mat-chip>
+
+                  <p>Date d'échéance : {{t.dateEcheance | date: 'dd/MM/yyyy' }}</p>
+                  <p>Date de fin : {{t.dateFin | date: 'dd/MM/yyyy' }}</p>
+
+                  <p>{{ t.tacheDesc }}</p>
+                </mat-expansion-panel>
+              </ng-container>
+            </div>
+          </mat-accordion>
+        </mat-card-content>
       </mat-card>
     </div>
 
@@ -146,4 +185,67 @@
       </mat-card>
     </div>
   </div>
+</ng-template>
+
+<!--Template modification d'une tache-->
+<ng-template #editTask>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-form-field>
+          <mat-label>Nom</mat-label>
+          <input matInput [(ngModel)]="editedTache.nom" />
+        </mat-form-field>
+      </mat-panel-title>
+
+      <mat-panel-description>
+
+        <div class="prio-statut">
+          <mat-form-field>
+            <mat-label>Priorité</mat-label>
+            <mat-select [(ngModel)]="editedTache.priorite">
+              <mat-option *ngFor="let prio of priorites" [value]="prio">{{ prio }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Statut</mat-label>
+            <mat-select [(ngModel)]="editedTache.statut">
+              <mat-option *ngFor="let stat of statuts" [value]="stat">{{ stat }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-mini-fab (click)="saveTache()">
+            <mat-icon>save_alt</mat-icon>
+          </button>
+          <button mat-mini-fab (click)="cancelEditTache()">
+            <mat-icon>undo</mat-icon>
+          </button>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-form-field>
+      <mat-label>Responsable</mat-label>
+      <mat-select [(ngModel)]="editedTache.idUtilisateur" (selectionChange)="assignTache()">
+        <mat-option *ngFor="let user of usersInProjet" [value]="user.userId">{{ user.email }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date d’échéance</mat-label>
+      <input matInput [matDatepicker]="dpEch" [(ngModel)]="editedTache.dateEcheance">
+      <mat-datepicker-toggle matSuffix [for]="dpEch"></mat-datepicker-toggle>
+      <mat-datepicker #dpEch></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date de fin</mat-label>
+      <input matInput [matDatepicker]="dpFin" [(ngModel)]="editedTache.dateFin">
+      <mat-datepicker-toggle matSuffix [for]="dpFin"></mat-datepicker-toggle>
+      <mat-datepicker #dpFin></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="change-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="editedTache.tacheDesc"></textarea>
+    </mat-form-field>
+  </mat-expansion-panel>
 </ng-template>

@@ -28,6 +28,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public User getUserById(Long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User inconnu"));
+    }
+
     public boolean isUserExist(String email){
         return userRepository.existsByEmail(email);
     }

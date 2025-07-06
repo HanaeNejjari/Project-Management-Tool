@@ -30,10 +30,4 @@ INSERT INTO historique_modif (date_modification, champ_modifie, ancienne_valeur,
 ('2024-12-15', 'priorite', 'Moyenne', 'Haute', 3);
 
 
-INSERT INTO notification (contenu, date_envoi, type_notification, id_utilisateur) VALUES
-('Votre tâche "Créer le schéma UML" a été mise à jour.', '2024-01-05', 'Mise à jour tâche', 1),
-('La tâche "Mettre en place la base de données" a été assignée à vous.', '2024-01-06', 'Attribution tâche', 2),
-('La date d\'échéance de la tâche "Entrer en contact avec les developpeurs" a changé.', '2024-01-12', 'Modification échéance', 3);
-
-
 

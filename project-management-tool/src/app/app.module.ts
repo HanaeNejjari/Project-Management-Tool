@@ -22,11 +22,12 @@ import { ProjetDetailComponent } from './home/projet-detail/projet-detail.compon
 import {MatList, MatListItem, MatNavList} from '@angular/material/list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDividerModule} from '@angular/material/divider';
-import {MatChip} from '@angular/material/chips';
+import {MatChipsModule} from '@angular/material/chips';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatNativeDateModule} from '@angular/material/core';
 import {DatePipe} from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -77,12 +78,13 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MatCardHeader,
     MatCardModule,
     MatDividerModule,
-    MatChip,
+    MatChipsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatFabButton,
     MatMiniFabButton,
     MatSelectModule,
+    MatExpansionModule,
   ],
   providers: [
     DatePipe,

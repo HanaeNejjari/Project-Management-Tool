@@ -53,14 +53,3 @@ CREATE TABLE historique_modif (
     id_tache INTEGER NOT NULL,
     FOREIGN KEY (id_tache) REFERENCES tache(id) ON DELETE CASCADE
 );
-
--- Table Notification
-CREATE TABLE notification (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    contenu TEXT NOT NULL,
-    date_envoi DATE NOT NULL,
-    type_notification VARCHAR(50),
-    id_utilisateur INTEGER NOT NULL,
-    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id) ON DELETE CASCADE
-);
-
