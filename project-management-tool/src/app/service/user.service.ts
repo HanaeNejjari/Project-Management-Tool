@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 
@@ -39,13 +39,24 @@ export class UserService {
   getUserInfo(): any{
     const token = this.getToken();
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return {
-        email: payload.sub,
-        userId: payload.userId
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return {
+          email: payload.sub,
+          userId: payload.userId
+        };
+      } catch (e) {
+        console.error('Invalid token format', e);
+        return null;
       }
     }
     return null;
+  }
+
+  getCurrentUserInfo(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({Authorization: 'Bearer ' + token});
+    return this.http.get(`${this.apiUrl}/users/me`, {headers});
   }
 
   isLoggedIn(): boolean{

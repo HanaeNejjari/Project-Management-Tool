@@ -1,3 +1,24 @@
-<p>home works!</p>
-<p>Bienvenue, {{ userInfo?.email }} !</p>
-<button mat-raised-button color="basic" (click)="logout()" >Se deconnecter</button>
+<mat-toolbar>
+  <img src="assets/logo_white.png" alt="Logo" class="logo">
+  <span>Bienvenue, {{ userInfo.nomUtilisateur }} !</span>
+  <span class="spacer"></span>
+  <button mat-raised-button color="basic" (click)="logout()" >Se deconnecter</button>
+</mat-toolbar>
+
+<mat-sidenav-container class = "container" autosize = "true">
+  <mat-sidenav mode = "side" opened>
+    <app-projet-list
+      [user]="userInfo"
+      [projets]="projets"
+      (projetSelected)="onProjetSelected($event)">
+    </app-projet-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <app-projet-detail
+      [user]="userInfo"
+      [projet]="selectedProjet"
+      (projetChanged)="onProjetChanged($event)">
+    </app-projet-detail>
+  </mat-sidenav-content>
+</mat-sidenav-container>

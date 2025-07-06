@@ -1,0 +1,8 @@
+<h2>Mes projets</h2>
+<button mat-raised-button color="basic" (click)="createProjet()" >Nouveau projet</button>
+<mat-list *ngFor="let projet of projets">
+  <mat-divider></mat-divider>
+  <mat-list-item  (click)="selectProjet(projet)">
+    {{ projet.nom }}
+  </mat-list-item>
+</mat-list>

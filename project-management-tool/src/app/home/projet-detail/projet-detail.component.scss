@@ -1,0 +1,171 @@
+@use '@angular/material' as mat;
+
+.logo{
+  max-width: 500px;
+  margin-bottom: 16px;
+  object-fit: contain;
+}
+
+.select-projet{
+  font-size: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 24px;
+}
+
+.main-content {
+  flex: 0 0 65%;
+  max-width: 65%;
+  min-width: 320px;
+}
+
+.project-card {
+  width: 100%;
+}
+
+.project-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header-title {
+  text-align: center;
+}
+
+.project-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.project-subtitle {
+  text-align: left;
+  font-size: 16px;
+  color: lightgray;
+  margin-top: 4px;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.date-field {
+  flex: 0 0 200px;
+  min-width: 160px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.role-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.users-list {
+  flex: 0 0 35%;
+  max-width: 35%;
+  min-width: 320px;
+  font-size: 16px;
+}
+
+.users-card {
+  width: 100%;
+}
+
+mat-list-item {
+  padding: 16px 0;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.change-width{
+  width: 100%;
+}
+
+.change-role{
+  width: 150px;
+  margin: 0;
+}
+
+.add-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.change-email,
+.change-role {
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+.compact-field {
+  //margin-top: 30px;
+  @include mat.all-component-densities(-3);
+}
+
+
+
+
+@media (max-width: 768px) {
+  .main-page {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .project-title {
+    font-size: 20px;
+  }
+
+  .project-subtitle {
+    font-size: 14px;
+  }
+
+  .date-field {
+    width: 100%;
+  }
+
+  .role-field {
+    justify-content: flex-end;
+  }
+
+  .main-content,
+  .users-list {
+    max-width: 100%;
+  }
+}

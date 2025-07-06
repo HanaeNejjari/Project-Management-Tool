@@ -62,36 +62,36 @@ public class UserControllerTest {
 
     @Test
     void isUserExists_shouldReturnTrueOrFalse() throws Exception {
-        when(userService.isUserExist("test@mail.fr")).thenReturn(true);
+        when(userService.isUserExist("test@email.com")).thenReturn(true);
 
-        mockMvc.perform(get("/api/users/exists?email=test@mail.fr"))
+        mockMvc.perform(get("/api/users/exists?email=test@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
 
-        verify(userService).isUserExist("test@mail.fr");
+        verify(userService).isUserExist("test@email.com");
     }
 
     @Test
     void registerUser_shouldReturnTokenIfNewUser() throws Exception {
         User user = new User();
-        user.setEmail("new@mail.fr");
+        user.setEmail("test@email.com");
         user.setMotDePasse("password");
 
         when(userService.isUserExist(user.getEmail())).thenReturn(false);
         when(userService.createUser(any(User.class))).thenReturn(user);
-        when(jwtService.generateToken(user)).thenReturn("mocked-token");
+        when(jwtService.generateToken(user)).thenReturn("mockToken");
 
         mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("mocked-token"));
+                .andExpect(content().string("mockToken"));
     }
 
     @Test
     void registerUser_shouldReturnBadRequestIfUserExists() throws Exception {
         User user = new User();
-        user.setEmail("existing@mail.fr");
+        user.setEmail("test@email.com");
 
         when(userService.isUserExist(user.getEmail())).thenReturn(true);
 
@@ -105,28 +105,44 @@ public class UserControllerTest {
     @Test
     void loginUser_shouldReturnTokenIfCredentialsMatch() throws Exception {
         User user = new User();
-        user.setEmail("test@example.com");
+        user.setEmail("test@email.com");
         user.setMotDePasse("password");
 
         when(userService.isUserExist(user.getEmail())).thenReturn(true);
         when(userService.getUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(jwtService.generateToken(any(User.class))).thenReturn("jwt-token");
+        when(jwtService.generateToken(any(User.class))).thenReturn("mockToken");
 
         mockMvc.perform(post("/api/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"test@example.com\",\"motDePasse\":\"password\"}"))
+                        .content("{\"email\":\"test@email.com\",\"motDePasse\":\"password\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("jwt-token"));
+                .andExpect(content().string("mockToken"));
+    }
+
+    @Test
+    void loginUser_shouldReturnUnauthorizedIfUserDoesNtExist() throws Exception {
+        User user = new User();
+        user.setEmail("test@email.com");
+        user.setMotDePasse("password");
+
+
+        when(userService.isUserExist(user.getEmail())).thenReturn(false);
+
+        mockMvc.perform(post("/api/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("Invalid email or password"));
     }
 
     @Test
     void loginUser_shouldReturnUnauthorizedIfInvalidCredentials() throws Exception {
         User user = new User();
-        user.setEmail("user@mail.fr");
+        user.setEmail("test@email.com");
         user.setMotDePasse("wrongpassword");
 
         User existingUser = new User();
-        existingUser.setEmail("user@mail.fr");
+        existingUser.setEmail("test@email.com");
         existingUser.setMotDePasse("correctpassword");
 
         when(userService.isUserExist(user.getEmail())).thenReturn(true);

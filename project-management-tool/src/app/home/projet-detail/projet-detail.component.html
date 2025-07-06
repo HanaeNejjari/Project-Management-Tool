@@ -1,0 +1,149 @@
+<div *ngIf="!isEditing; else editForm" class="main-page">
+<!-- Details du projet-->
+  <ng-container *ngIf="projet">
+    <div class="main-content">
+      <mat-card class="project-card">
+        <mat-card-header class="project-header">
+          <div class="header-title">
+            <mat-card-title class="project-title">{{ projet.nom }}</mat-card-title>
+            <mat-card-subtitle class="project-subtitle">{{ projet.projetDesc }}</mat-card-subtitle>
+          </div>
+
+          <div class="header-info">
+            <mat-form-field appearance="fill" class="date-field">
+              <mat-label>Date de début</mat-label>
+              <input matInput [matDatepicker]="dp1" [value]="projet.dateDebut" disabled>
+              <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+              <mat-datepicker #dp1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="spacer"></div>
+
+            <div class="role-field">
+              <mat-chip color="accent">{{ userRole }}</mat-chip>
+              <button mat-mini-fab *ngIf="userRole === 'Administrateur' || userRole === 'ADMINISTRATEUR'" (click)="startEdit()">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-header>
+      </mat-card>
+    </div>
+
+<!--Liste des utilisateurs-->
+    <div class="users-list">
+      <mat-card class="users-card">
+        <mat-card-title>Membres du projet</mat-card-title>
+        <mat-list *ngFor="let u of usersInProjet">
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div class="user-item">
+              <span>{{ u.email }}</span>
+              <mat-chip color="accent">{{ u.role }}</mat-chip>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card>
+    </div>
+
+  </ng-container>
+  <ng-container *ngIf="!projet">
+    <div class="select-projet">
+      <p>Sélectionnez un projet pour voir les détails</p>
+      <img src="assets/logo_white.png" alt="Logo" class="logo">
+    </div>
+  </ng-container>
+</div>
+
+
+
+<!--Template si l'utilisateur est en modification-->
+<ng-template #editForm>
+  <div class="main-page">
+    <div class="main-content">
+      <mat-card class="project-card">
+        <mat-card-header class="project-header">
+          <div class="header-title">
+            <mat-card-title class="project-title change-width">
+              <mat-form-field class="change-width">
+                <mat-label>Nom du projet</mat-label>
+                <input matInput [(ngModel)]="updatedProjet.nom" />
+              </mat-form-field>
+            </mat-card-title>
+            <mat-card-subtitle class="project-subtitle change-width">
+              <mat-form-field class="change-width">
+                <mat-label>Description du projet</mat-label>
+                <textarea matInput [(ngModel)]="updatedProjet.projetDesc"></textarea>
+              </mat-form-field>
+            </mat-card-subtitle>
+          </div>
+
+          <div class="header-info">
+            <mat-form-field appearance="fill" class="date-field">
+              <mat-label>Date de début</mat-label>
+              <input matInput [matDatepicker]="dp1" [value]="projet.dateDebut" [(ngModel)]="updatedProjet.dateDebut">
+              <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+              <mat-datepicker #dp1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="spacer"></div>
+
+            <div class="role-field">
+              <mat-chip color="accent">{{ userRole }}</mat-chip>
+              <button mat-mini-fab (click)="saveEdit()">
+                <mat-icon>save_alt</mat-icon>
+              </button>
+              <button mat-mini-fab (click)="cancelEdit()">
+                <mat-icon>undo</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-header>
+      </mat-card>
+    </div>
+
+    <!--Liste des utilisateurs-->
+    <div class="users-list">
+      <mat-card class="users-card">
+        <mat-card-title>Membres du projet</mat-card-title>
+        <mat-list *ngFor="let u of usersInProjet">
+<!--          <mat-divider></mat-divider>-->
+          <mat-list-item>
+            <div class="user-item">
+              <span class="change-email">{{ u.email }}</span>
+              <mat-form-field class="change-role compact-field">
+                <mat-label>Role</mat-label>
+                <mat-select [(ngModel)]="editedRoles[u.email]" (selectionChange)="changeRole(u.email)">
+                  <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-icon-button color="warn" (click)="deleteUserInProjet(u.email)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+<!--        <mat-divider></mat-divider>-->
+        <span>Ajouter un membre</span>
+
+        <div class="add-user">
+          <mat-form-field class="add-email compact-field" >
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="newEmail" placeholder="Email" />
+          </mat-form-field>
+          <mat-form-field class="add-role compact-field">
+            <mat-label>Role</mat-label>
+            <mat-select [(ngModel)]="newRole">
+              <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button (click)="addUserInProjet()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
