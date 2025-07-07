@@ -1,6 +1,6 @@
 <mat-toolbar>
   <img src="assets/logo_white.png" alt="Logo" class="logo">
-  <span>Bienvenue, {{ userInfo.nomUtilisateur }} !</span>
+  <span *ngIf="userInfo">Bienvenue, {{ userInfo.nomUtilisateur }} !</span>
   <span class="spacer"></span>
   <button mat-raised-button color="basic" (click)="logout()" >Se deconnecter</button>
 </mat-toolbar>
