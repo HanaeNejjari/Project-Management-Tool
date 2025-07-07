@@ -61,6 +61,7 @@
                   <p>Date de fin : {{t.dateFin | date: 'dd/MM/yyyy' }}</p>
 
                   <p>{{ t.tacheDesc }}</p>
+                  <button mat-raised-button color="accent" (click)="openHistorique(t.id)" >Afficher historique</button>
                 </mat-expansion-panel>
               </ng-container>
             </div>

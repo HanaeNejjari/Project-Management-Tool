@@ -36,4 +36,14 @@ public class Tache {
     @JoinColumn(name = "id_utilisateur")
     private User user;
 
+    public Tache(Tache t){
+        this.id = t.id;
+        this.nom = t.nom;
+        this.tacheDesc = t.tacheDesc;
+        this.dateEcheance = t.dateEcheance;
+        this.priorite = t.priorite;
+        this.dateFin = t.dateFin;
+        this.statut = t.statut;
+    }
+
 }

@@ -5,6 +5,8 @@ import {ProjetService} from '../../service/projet.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Tache} from '../../models/tache';
 import {TacheService} from '../../service/tache.service';
+import {MatDialog} from '@angular/material/dialog';
+import {HistoriqueComponent} from './historique/historique.component';
 
 @Component({
   selector: 'app-projet-detail',
@@ -41,7 +43,8 @@ export class ProjetDetailComponent implements OnInit, OnChanges {
   editedTache: Partial<Tache> = {};
 
 
-  constructor(private projetService: ProjetService, private tacheService: TacheService, private snackBar: MatSnackBar) { }
+  constructor(private projetService: ProjetService, private tacheService: TacheService, private snackBar: MatSnackBar,
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getUserRole()
@@ -246,6 +249,13 @@ export class ProjetDetailComponent implements OnInit, OnChanges {
   getUserEmail(userId: number): String{
     const user = this.usersInProjet.find(u => u.userId === userId);
     return user ? user.email: 'Inconnu';
+  }
+
+  openHistorique(tacheId: number){
+    this.dialog.open(HistoriqueComponent, {
+      width: '60%',
+      data: {tacheId: tacheId},
+      autoFocus: true})
   }
 
   normalize(value: string): string {

@@ -28,6 +28,8 @@ import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatDateFormats, MatNativeDateModule} 
 import {DatePipe} from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { HistoriqueComponent } from './home/projet-detail/historique/historique.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 export const MY_DATE_FORMATS: MatDateFormats = {
   parse: {
@@ -50,7 +52,8 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     RegisterComponent,
     HomeComponent,
     ProjetListComponent,
-    ProjetDetailComponent
+    ProjetDetailComponent,
+    HistoriqueComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +88,7 @@ export const MY_DATE_FORMATS: MatDateFormats = {
     MatMiniFabButton,
     MatSelectModule,
     MatExpansionModule,
+    MatDialogModule,
   ],
   providers: [
     DatePipe,

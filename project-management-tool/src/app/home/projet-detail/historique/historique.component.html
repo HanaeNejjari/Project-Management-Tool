@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Historique modification</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-list *ngFor="let h of historique">
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <p>
+        {{h.date_modification | date: 'dd/MM/yyyy' }} :
+        {{ h.champ_modifie }} : {{ h.ancienne_valeur }} -> {{ h.nouvelle_valeur }}
+      </p>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fermer</button>
+</mat-dialog-actions>
