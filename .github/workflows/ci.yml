@@ -28,7 +28,7 @@ jobs:
       - name: Build backend with Maven (skip tests)
         run: ./mvnw clean package -DskipTests
         working-directory: ./backend/project-management-tool
-        
+
   docker-build-push:
     name: Docker Build & Push
     runs-on: ubuntu-latest
