@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: mysql-pmt
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Mama010166.
+      MYSQL_DATABASE: project_management_tool
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    image: hanaenejjari/backend-pmt:latest
+    container_name: backend-pmt
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/project_management_tool?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Mama010166.
+    restart: always
+
+  frontend:
+    image: hanaenejjari/frontend-pmt:latest
+    container_name: frontend-pmt
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: always
+
+volumes:
+  mysql_data:
