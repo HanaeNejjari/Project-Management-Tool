@@ -22,12 +22,13 @@ jobs:
           distribution: 'temurin'
 
       - name: Make Maven wrapper executable
-        run: chmod +x ./backend/project-management-tool/mvnw
-
-      - name: Build backend with Maven (skip tests)
-        run: ./backend/project-management-tool/mvnw clean package -DskipTests
+        run: chmod +x mvnw
         working-directory: ./backend/project-management-tool
 
+      - name: Build backend with Maven (skip tests)
+        run: ./mvnw clean package -DskipTests
+        working-directory: ./backend/project-management-tool
+        
   docker-build-push:
     name: Docker Build & Push
     runs-on: ubuntu-latest
