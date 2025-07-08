@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,10 +26,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@WebMvcTest(UserController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -58,6 +58,17 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
 
         verify(userService, times(1)).getAllUsers();
+    }
+
+    @Test
+    void getAllUsers_shouldReturnEmptyList() throws Exception {
+        when(userService.getAllUsers()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+
+        verify(userService).getAllUsers();
     }
 
     @Test
@@ -120,11 +131,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void loginUser_shouldReturnUnauthorizedIfUserDoesNtExist() throws Exception {
+    void loginUser_shouldReturnUnauthorizedIfUserDoesNotExist() throws Exception {
         User user = new User();
         user.setEmail("test@email.com");
         user.setMotDePasse("password");
-
 
         when(userService.isUserExist(user.getEmail())).thenReturn(false);
 
@@ -136,7 +146,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void loginUser_shouldReturnUnauthorizedIfInvalidCredentials() throws Exception {
+    void loginUser_shouldReturnUnauthorizedIfCredentialsInvalid() throws Exception {
         User user = new User();
         user.setEmail("test@email.com");
         user.setMotDePasse("wrongpassword");
@@ -147,6 +157,22 @@ public class UserControllerTest {
 
         when(userService.isUserExist(user.getEmail())).thenReturn(true);
         when(userService.getUserByEmail(user.getEmail())).thenReturn(Optional.of(existingUser));
+
+        mockMvc.perform(post("/api/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("Invalid email or password"));
+    }
+
+    @Test
+    void loginUser_shouldReturnUnauthorizedIfUserLookupFails() throws Exception {
+        User user = new User();
+        user.setEmail("ghost@email.com");
+        user.setMotDePasse("123");
+
+        when(userService.isUserExist(user.getEmail())).thenReturn(true);
+        when(userService.getUserByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         mockMvc.perform(post("/api/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
