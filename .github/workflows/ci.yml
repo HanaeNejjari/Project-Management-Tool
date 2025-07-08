@@ -26,7 +26,6 @@ jobs:
 
       - name: Build backend with Maven (with tests)
         run: ./backend/project-management-tool/mvnw clean verify --no-transfer-progress
-        working-directory: ./backend/project-management-tool
 
   docker-build-push:
     name: Docker Build & Push
