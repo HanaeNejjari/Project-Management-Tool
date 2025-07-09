@@ -25,8 +25,8 @@ jobs:
         run: chmod +x mvnw
         working-directory: ./backend/project-management-tool
 
-      - name: Build backend with Maven (skip tests)
-        run: ./mvnw clean package -DskipTests
+      - name: Build backend with Maven (with tests)
+        run: ./mvnw clean verify --no-transfer-progress
         working-directory: ./backend/project-management-tool
 
   docker-build-push:
