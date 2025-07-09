@@ -1,6 +1,10 @@
 # ProjectManagementTool
 
-intro
+Ce projet a été réalisé dans le cadre d'une étude de cas en tant que développeur full-stack chez "Code Solutions". Il s'agit d'une plateforme collaborative de gestion de projets nommée Project Management Tool (PMT).
+
+Le but principal était de permettre à des équipes de développement logiciel de planifier, suivre et organiser leurs projets de manière fluide et simplifiée. Ce projet m'a été confié par John Doe (CEO), encadré par Nicolas (Product Owner) pour les besoins fonctionnels, et par Mariana (Tech Lead) pour les aspects techniques.
+
+L'application repose sur un frontend Angular et un backend Spring Boot, avec une base de données relationnelle. Il met en œuvre des fonctionnalités essentielles comme l’authentification JWT, la gestion de projets, la répartition de rôles, les tâches et leur suivi historique. Elle a été conçue dans une optique d’industrialisation : dockerisation, tests automatisés et déploiement via une pipeline GitHub Actions.
 
 ## Environnement
 Le projet est dévéloppé avec MySql Angular et Springboot. Voici les versions des outils qui ont été utilisés :
@@ -56,7 +60,7 @@ Ouvrer sur un navigateur le lien http://localhost:4200 pour accéder au projet
 
 ## Project Management Tool
 En arrivant sur le site l'utilisateur a le choix de créer un nouveau compte ou de se connecter sur un compte existant:
-<img src="./screen\ptm_choice.png" alt="choice">
+<img src="./screen\pmt_choice.png" alt="choice">
 
 Une fois connecté l'utilisateur peut naviguer entre ses projets pour les afficher, visualiser les tâches et modifier les données en fonction de son rôle dans le projet
 <img src="./screen\pmt_projet.png" alt="projet">
