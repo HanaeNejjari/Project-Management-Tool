@@ -22,12 +22,26 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDialogModule} from '@angular/material/dialog';
+import {ProjetService} from '../../service/projet.service';
+import {User} from '../../models/user';
+import {Projet} from '../../models/projet';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {of, throwError} from 'rxjs';
 
 describe('ProjetListComponent', () => {
   let component: ProjetListComponent;
   let fixture: ComponentFixture<ProjetListComponent>;
+  let mockProjetService: jasmine.SpyObj<ProjetService>;
+
+  const mockProjets: Projet[] = [
+    { id: 1, nom: 'Projet 1', projetDesc: 'Description', dateDebut: new Date() },
+    { id: 2, nom: 'Projet 2', projetDesc: 'Description 2', dateDebut: new Date() },
+  ];
+
 
   beforeEach(async () => {
+    mockProjetService = jasmine.createSpyObj('ProjetService', ['getUserProjets', 'createProjet']);
+
     await TestBed.configureTestingModule({
       imports: [
         BrowserModule,
@@ -64,7 +78,12 @@ describe('ProjetListComponent', () => {
         MatExpansionModule,
         MatDialogModule,
       ],
-      declarations: [ProjetListComponent]
+      declarations: [ProjetListComponent],
+      providers: [
+        { provide: ProjetService, useValue: mockProjetService },
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+
     })
     .compileComponents();
 
@@ -73,7 +92,49 @@ describe('ProjetListComponent', () => {
     fixture.detectChanges();
   });
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ProjetListComponent);
+    component = fixture.componentInstance;
+    component.user = { id: 1, email: 'test@mail.com', nomUtilisateur: 'TestUser' } as User;
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get projects on init', () => {
+    mockProjetService.getUserProjets.and.returnValue(of(mockProjets));
+    component.ngOnInit();
+    expect(mockProjetService.getUserProjets).toHaveBeenCalled();
+    expect(component.projets.length).toBe(2);
+  });
+
+  it('should handle error when getUserProjets fails', () => {
+    spyOn(console, 'error');
+    mockProjetService.getUserProjets.and.returnValue(throwError(() => new Error('error')));
+    component.ngOnInit();
+    expect(console.error).toHaveBeenCalled();
+  });
+
+  it('should emit selected project', () => {
+    spyOn(component.projetSelected, 'emit');
+    const projet = mockProjets[0];
+    component.selectProjet(projet);
+    expect(component.projetSelected.emit).toHaveBeenCalledWith(projet);
+  });
+
+  it('should create a new project and select it', () => {
+    const newProjet = { id: 3, nom: 'Nouveau Projet', projetDesc: 'Description projet', dateDebut: new Date() };
+    mockProjetService.createProjet.and.returnValue(of(newProjet));
+    mockProjetService.getUserProjets.and.returnValue(of([...mockProjets, newProjet]));
+
+    spyOn(component, 'selectProjet');
+    component.createProjet();
+
+    expect(component.selectProjet).toHaveBeenCalledWith(newProjet);
+    expect(mockProjetService.createProjet).toHaveBeenCalled();
+    expect(mockProjetService.getUserProjets).toHaveBeenCalled();
+  });
+
+
 });

@@ -25,12 +25,36 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDialogModule} from '@angular/material/dialog';
 import {ProjetListComponent} from './projet-list/projet-list.component';
 import {ProjetDetailComponent} from './projet-detail/projet-detail.component';
+import {UserService} from '../service/user.service';
+import {Router} from '@angular/router';
+import {User} from '../models/user';
+import {Projet} from '../models/projet';
+import {of} from 'rxjs';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+  let userServiceSpy: jasmine.SpyObj<UserService>;
+  let routerSpy: jasmine.SpyObj<Router>;
+
+  const mockUser: User = {
+    id: 1,
+    email: 'test@mail.com',
+    nomUtilisateur: 'TestUser',
+    motDePasse: 'password'
+  };
+
+  const mockProjet: Projet = {
+    id: 1,
+    nom: 'Projet Test',
+    projetDesc: 'Description',
+    dateDebut: new Date()
+  };
 
   beforeEach(async () => {
+    userServiceSpy = jasmine.createSpyObj('UserService', ['getCurrentUserInfo', 'logout']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
       declarations: [HomeComponent, ProjetListComponent, ProjetDetailComponent],
       imports: [
@@ -68,15 +92,45 @@ describe('HomeComponent', () => {
         MatExpansionModule,
         MatDialogModule,
       ],
+      providers: [
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: Router, useValue: routerSpy }
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
+    userServiceSpy.getCurrentUserInfo.and.returnValue(of(mockUser));
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should fetch user info on init', () => {
+    expect(userServiceSpy.getCurrentUserInfo).toHaveBeenCalled();
+    expect(component.userInfo).toEqual(mockUser);
+  });
+
+  it('should select a project', () => {
+    component.onProjetSelected(mockProjet);
+    expect(component.selectedProjet).toEqual(mockProjet);
+  });
+
+  it('should logout and navigate', () => {
+    component.logout();
+    expect(userServiceSpy.logout).toHaveBeenCalled();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/auth/choice']);
+  });
+
+  it('should update project in list and selection', () => {
+    const updatedProjet = { ...mockProjet, nom: 'Projet MAJ' };
+    component.projets = [mockProjet];
+    component.onProjetChanged(updatedProjet);
+    expect(component.projets[0].nom).toBe('Projet MAJ');
+    expect(component.selectedProjet).toEqual(updatedProjet);
+  });
+
 });

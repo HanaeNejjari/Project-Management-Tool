@@ -21,7 +21,7 @@
 
             <div class="role-field">
               <mat-chip color="accent">{{ userRole }}</mat-chip>
-              <button mat-mini-fab *ngIf="userRole === 'Administrateur' || userRole === 'ADMINISTRATEUR'" (click)="startEdit()">
+              <button mat-mini-fab *ngIf="userRole === 'Administrateur'" (click)="startEdit()">
                 <mat-icon>edit</mat-icon>
               </button>
             </div>
