@@ -89,8 +89,11 @@ public class ProjetControllerTest {
         String token = "t";
         when(jwtService.extractEmail(token)).thenReturn("x@y");
         when(userService.getUserByEmail("x@y")).thenReturn(Optional.empty());
-        var resp = projetController.getProjectsForCurrentUser("Bearer " + token);
-        assertEquals(404, resp.getStatusCodeValue());
+
+        assertDoesNotThrow(() -> {
+            var resp = projetController.getProjectsForCurrentUser("Bearer " + token);
+            assertEquals(404, resp.getStatusCodeValue());
+        });
     }
 
     @Test
@@ -190,15 +193,21 @@ public class ProjetControllerTest {
 
     @Test
     void updateRole_shouldReturnNotFoundIfUserNotInProjet() {
-        String token="t"; String email="e@x"; User u=new User(2L,email,"p","");
+        String token = "t";
+        String email = "e@x";
+        User u = new User(2L, email, "p", "");
+
         when(jwtService.extractEmail(token)).thenReturn(email);
         when(userService.getUserByEmail(email)).thenReturn(Optional.of(u));
-        when(roleUtilisateurService.getUserRoleInProjet(2L,9L)).thenReturn(ADMIN);
-        when(projetService.getProjetById(9L)).thenReturn(new Projet(9L,"X","D",LocalDate.now()));
-        when(userService.getUserByEmail("c@x")).thenReturn(Optional.of(new User(3L,"c@x","p","")));
-        when(roleUtilisateurService.getRoleByUserIdAndProjetId(3L,9L)).thenReturn(Optional.empty());
-        var resp=projetController.updateRole("c@x",9L,ADMIN,"Bearer "+token);
-        assertEquals(404, resp.getStatusCodeValue());
+        when(roleUtilisateurService.getUserRoleInProjet(2L, 9L)).thenReturn(ADMIN);
+        when(projetService.getProjetById(9L)).thenReturn(new Projet(9L, "X", "D", LocalDate.now()));
+        when(userService.getUserByEmail("c@x")).thenReturn(Optional.of(new User(3L, "c@x", "p", "")));
+        when(roleUtilisateurService.getRoleByUserIdAndProjetId(3L, 9L)).thenReturn(Optional.empty());
+
+        assertDoesNotThrow(() -> {
+            var resp = projetController.updateRole("c@x", 9L, ADMIN, "Bearer " + token);
+            assertEquals(404, resp.getStatusCodeValue());
+        });
     }
 
     @Test
@@ -247,8 +256,10 @@ public class ProjetControllerTest {
         when(projetService.getProjetById(5L)).thenReturn(new Projet(5L, "X", "Y", LocalDate.now()));
         when(userService.getUserByEmail("unknown@x.com")).thenReturn(Optional.empty());
 
-        var resp = projetController.assignRole("unknown@x.com", 5L, ADMIN, "Bearer " + token);
-        assertEquals(404, resp.getStatusCodeValue());
+        assertDoesNotThrow(() -> {
+            var resp = projetController.assignRole("unknown@x.com", 5L, ADMIN, "Bearer " + token);
+            assertEquals(404, resp.getStatusCodeValue());
+        });
     }
 
     @Test
@@ -257,8 +268,10 @@ public class ProjetControllerTest {
         when(jwtService.extractEmail(token)).thenReturn("missing@x.com");
         when(userService.getUserByEmail("missing@x.com")).thenReturn(Optional.empty());
 
-        var resp = projetController.updateProjet(1L, new Projet(), "Bearer " + token);
-        assertEquals(404, resp.getStatusCodeValue());
+        assertDoesNotThrow(() -> {
+            var resp = projetController.updateProjet(1L, new Projet(), "Bearer " + token);
+            assertEquals(404, resp.getStatusCodeValue());
+        });
     }
 
     @Test
@@ -275,8 +288,10 @@ public class ProjetControllerTest {
         when(projetService.getProjetById(12L)).thenReturn(projet);
         when(userService.getUserByEmail("missing@x.com")).thenReturn(Optional.empty());
 
-        var resp = projetController.updateRole("missing@x.com", 12L, ADMIN, "Bearer " + token);
-        assertEquals(404, resp.getStatusCodeValue());
+        assertDoesNotThrow(() -> {
+            var resp = projetController.updateRole("missing@x.com", 12L, ADMIN, "Bearer " + token);
+            assertEquals(404, resp.getStatusCodeValue());
+        });
     }
 
    @Test
