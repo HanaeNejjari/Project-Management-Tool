@@ -15,6 +15,7 @@ import static com.projectmt.project_management_tool.utils.RoleConstants.ADMIN;
 import static com.projectmt.project_management_tool.utils.RoleConstants.ALL_ROLES;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static com.projectmt.project_management_tool.utils.RoleConstants.*;
 
 public class ProjetControllerTest {
 
@@ -329,8 +330,8 @@ public class ProjetControllerTest {
         when(roleUtilisateurService.getUserRoleInProjet(2L, 55L)).thenReturn(null);
         when(roleUtilisateurService.saveRoleUtilisateur(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        var resp = projetController.assignRole("target@x.com", 55L, RoleConstants.MEMBRE, "Bearer " + token);
-        assertEquals(201, resp.getStatusCodeValue());
+        var resp = projetController.assignRole("target@x.com", 55L, MEMBRE, "Bearer " + token);
+       assertEquals(201, resp.getStatusCodeValue());
         assertEquals("MEMBRE", ((RoleUtilisateur) resp.getBody()).getLibelle());
     }
 
