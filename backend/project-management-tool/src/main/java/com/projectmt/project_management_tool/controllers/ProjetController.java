@@ -197,7 +197,7 @@ public class ProjetController {
         }
 
         //On vérifie que le role existe
-        if (!ALL_ROLES.contains(role)){
+        if (role == null || !ALL_ROLES.contains(role)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role inexistant");
         }
 

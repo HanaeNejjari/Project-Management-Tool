@@ -278,24 +278,26 @@ public class ProjetControllerTest {
         assertEquals(404, resp.getStatusCodeValue());
     }
 
-    @Test
-    void assignRole_shouldReturnNotFoundWhenRoleIsNull() {
-        String token = "tok";
-        String email = "admin@x.com";
-        User admin = new User(1L, email, "pass", "Admin");
-        User target = new User(2L, "target@x.com", "pass", "Target");
-        Projet projet = new Projet(15L, "Z", "desc", LocalDate.now());
+   @Test
+   void assignRole_shouldReturnNotFoundWhenRoleIsNull() {
+       String token = "tok";
+       String email = "admin@x.com";
+       User admin = new User(1L, email, "pass", "Admin");
+       User target = new User(2L, "target@x.com", "pass", "Target");
+       Projet projet = new Projet(15L, "Z", "desc", LocalDate.now());
 
-        when(jwtService.extractEmail(token)).thenReturn(email);
-        when(userService.getUserByEmail(email)).thenReturn(Optional.of(admin));
-        when(userService.getUserByEmail("target@x.com")).thenReturn(Optional.of(target));
-        when(roleUtilisateurService.getUserRoleInProjet(1L, 15L)).thenReturn(ADMIN);
-        when(roleUtilisateurService.getUserRoleInProjet(2L, 15L)).thenReturn(null);
-        when(projetService.getProjetById(15L)).thenReturn(projet);
+       when(jwtService.extractEmail(token)).thenReturn(email);
+       when(userService.getUserByEmail(email)).thenReturn(Optional.of(admin));
+       when(userService.getUserByEmail("target@x.com")).thenReturn(Optional.of(target));
+       when(roleUtilisateurService.getUserRoleInProjet(1L, 15L)).thenReturn(ADMIN);
+       when(roleUtilisateurService.getUserRoleInProjet(2L, 15L)).thenReturn(null);
+       when(projetService.getProjetById(15L)).thenReturn(projet);
 
-        var resp = projetController.assignRole("target@x.com", 15L, null, "Bearer " + token);
-        assertEquals(404, resp.getStatusCodeValue());
-    }
+       assertDoesNotThrow(() -> {
+           var resp = projetController.assignRole("target@x.com", 15L, null, "Bearer " + token);
+           assertEquals(404, resp.getStatusCodeValue());
+       });
+   }
 
     @Test
     void getProjectById_shouldReturnUnauthorizedWhenHeaderIsEmptyString() {
@@ -327,7 +329,7 @@ public class ProjetControllerTest {
         when(roleUtilisateurService.getUserRoleInProjet(2L, 55L)).thenReturn(null);
         when(roleUtilisateurService.saveRoleUtilisateur(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        var resp = projetController.assignRole("target@x.com", 55L, "MEMBRE", "Bearer " + token);
+        var resp = projetController.assignRole("target@x.com", 55L, RoleConstants.MEMBRE, "Bearer " + token);
         assertEquals(201, resp.getStatusCodeValue());
         assertEquals("MEMBRE", ((RoleUtilisateur) resp.getBody()).getLibelle());
     }

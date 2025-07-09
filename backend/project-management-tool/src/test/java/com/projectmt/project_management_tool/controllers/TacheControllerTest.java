@@ -183,7 +183,6 @@ public class TacheControllerTest {
         verify(historiqueModifService).createHisto(any(), eq("Responsable"), eq("old@user.com"), eq("new@user.com"));
     }
 
-    // 🔥 Nouveau test : cas où la tâche n’existe pas
     @Test
     void assignTask_shouldThrowIfTacheNotFound() {
         when(tacheService.getTacheById(999L)).thenThrow(new RuntimeException("Tâche introuvable"));
@@ -191,7 +190,6 @@ public class TacheControllerTest {
         assertThrows(RuntimeException.class, () -> controller.assignTask(999L, 1L));
     }
 
-    // 🔥 Nouveau test : cas où l’ancien user est null
     @Test
     void assignTask_shouldHandleNullPreviousUser() {
         Long tacheId = 1L;
@@ -212,7 +210,6 @@ public class TacheControllerTest {
         assertThrows(NullPointerException.class, () -> controller.assignTask(tacheId, userId));
     }
 
-    // 🔥 Nouveau test : emailService échoue
     @Test
     void assignTask_shouldHandleEmailServiceFailure() {
         Long tacheId = 1L;
