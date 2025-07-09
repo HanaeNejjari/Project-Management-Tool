@@ -332,7 +332,7 @@ public class ProjetControllerTest {
 
         var resp = projetController.assignRole("target@x.com", 55L, MEMBRE, "Bearer " + token);
        assertEquals(201, resp.getStatusCodeValue());
-        assertEquals("MEMBRE", ((RoleUtilisateur) resp.getBody()).getLibelle());
+        assertEquals(MEMBRE, ((RoleUtilisateur) resp.getBody()).getLibelle());
     }
 
     @Test

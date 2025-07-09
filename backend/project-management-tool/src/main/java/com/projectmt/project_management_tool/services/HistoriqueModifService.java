@@ -34,24 +34,35 @@ public class HistoriqueModifService {
 
     public List<HistoriqueModif> setTacheModif(Tache prevTache, Tache newTache){
         List<HistoriqueModif> histoList = new ArrayList<>();
-        if (!Objects.equals(prevTache.getNom(), newTache.getNom())){
+
+        if (!Objects.equals(prevTache.getNom(), newTache.getNom())) {
             histoList.add(createHisto(newTache, "Nom", prevTache.getNom(), newTache.getNom()));
         }
-        if (!Objects.equals(prevTache.getTacheDesc(), newTache.getTacheDesc())){
+
+        if (!Objects.equals(prevTache.getTacheDesc(), newTache.getTacheDesc())) {
             histoList.add(createHisto(newTache, "Description", prevTache.getTacheDesc(), newTache.getTacheDesc()));
         }
-        if (!Objects.equals(prevTache.getDateEcheance(), newTache.getDateEcheance())){
-            histoList.add(createHisto(newTache, "Date d'échéance", prevTache.getDateEcheance().toString(), newTache.getDateEcheance().toString()));
+
+        if (!Objects.equals(prevTache.getDateEcheance(), newTache.getDateEcheance())) {
+            String oldDate = (prevTache.getDateEcheance() != null) ? prevTache.getDateEcheance().toString() : null;
+            String newDate = (newTache.getDateEcheance() != null) ? newTache.getDateEcheance().toString() : null;
+            histoList.add(createHisto(newTache, "Date d'échéance", oldDate, newDate));
         }
-        if (!Objects.equals(prevTache.getPriorite(), newTache.getPriorite())){
+
+        if (!Objects.equals(prevTache.getPriorite(), newTache.getPriorite())) {
             histoList.add(createHisto(newTache, "Priorite", prevTache.getPriorite(), newTache.getPriorite()));
         }
-        if (!Objects.equals(prevTache.getDateFin(), newTache.getDateFin())){
-            histoList.add(createHisto(newTache, "Date de fin", prevTache.getDateFin().toString(), newTache.getDateFin().toString()));
+
+        if (!Objects.equals(prevTache.getDateFin(), newTache.getDateFin())) {
+            String oldFin = (prevTache.getDateFin() != null) ? prevTache.getDateFin().toString() : null;
+            String newFin = (newTache.getDateFin() != null) ? newTache.getDateFin().toString() : null;
+            histoList.add(createHisto(newTache, "Date de fin", oldFin, newFin));
         }
-        if (!Objects.equals(prevTache.getStatut(), newTache.getStatut())){
+
+        if (!Objects.equals(prevTache.getStatut(), newTache.getStatut())) {
             histoList.add(createHisto(newTache, "Statut", prevTache.getStatut(), newTache.getStatut()));
         }
+
         return histoList;
     }
 
