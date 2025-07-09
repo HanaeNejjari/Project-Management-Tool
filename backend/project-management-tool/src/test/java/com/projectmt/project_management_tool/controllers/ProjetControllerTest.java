@@ -16,6 +16,8 @@ import static com.projectmt.project_management_tool.utils.RoleConstants.ALL_ROLE
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static com.projectmt.project_management_tool.utils.RoleConstants.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 public class ProjetControllerTest {
 
@@ -90,10 +92,13 @@ public class ProjetControllerTest {
         when(jwtService.extractEmail(token)).thenReturn("x@y");
         when(userService.getUserByEmail("x@y")).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> {
-            var resp = projetController.getProjectsForCurrentUser("Bearer " + token);
-            assertEquals(404, resp.getStatusCodeValue());
-        });
+        try {
+            projetController.getProjectsForCurrentUser("Bearer " + token);
+            fail("Expected ResponseStatusException");
+        } catch (ResponseStatusException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals("Utilisateur introuvable", ex.getReason());
+        }
     }
 
     @Test
@@ -204,10 +209,13 @@ public class ProjetControllerTest {
         when(userService.getUserByEmail("c@x")).thenReturn(Optional.of(new User(3L, "c@x", "p", "")));
         when(roleUtilisateurService.getRoleByUserIdAndProjetId(3L, 9L)).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> {
-            var resp = projetController.updateRole("c@x", 9L, ADMIN, "Bearer " + token);
-            assertEquals(404, resp.getStatusCodeValue());
-        });
+        try {
+            projetController.updateRole("c@x", 9L, ADMIN, "Bearer " + token);
+            fail("Expected ResponseStatusException");
+        } catch (ResponseStatusException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals("L'utilisateur n'est pas dans le projet", ex.getReason());
+        }
     }
 
     @Test
@@ -256,10 +264,13 @@ public class ProjetControllerTest {
         when(projetService.getProjetById(5L)).thenReturn(new Projet(5L, "X", "Y", LocalDate.now()));
         when(userService.getUserByEmail("unknown@x.com")).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> {
-            var resp = projetController.assignRole("unknown@x.com", 5L, ADMIN, "Bearer " + token);
-            assertEquals(404, resp.getStatusCodeValue());
-        });
+        try {
+            projetController.assignRole("unknown@x.com", 5L, ADMIN, "Bearer " + token);
+            fail("Expected ResponseStatusException");
+        } catch (ResponseStatusException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals("Utilisateur introuvable", ex.getReason());
+        }
     }
 
     @Test
@@ -268,10 +279,13 @@ public class ProjetControllerTest {
         when(jwtService.extractEmail(token)).thenReturn("missing@x.com");
         when(userService.getUserByEmail("missing@x.com")).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> {
-            var resp = projetController.updateProjet(1L, new Projet(), "Bearer " + token);
-            assertEquals(404, resp.getStatusCodeValue());
-        });
+        try {
+            projetController.updateProjet(1L, new Projet(), "Bearer " + token);
+            fail("Expected ResponseStatusException");
+        } catch (ResponseStatusException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals("Utilisateur introuvable", ex.getReason());
+        }
     }
 
     @Test
@@ -279,7 +293,6 @@ public class ProjetControllerTest {
         String token = "tok";
         String email = "admin@x.com";
         User admin = new User(1L, email, "pass", "Admin");
-
         Projet projet = new Projet(12L, "Z", "desc", LocalDate.now());
 
         when(jwtService.extractEmail(token)).thenReturn(email);
@@ -288,10 +301,13 @@ public class ProjetControllerTest {
         when(projetService.getProjetById(12L)).thenReturn(projet);
         when(userService.getUserByEmail("missing@x.com")).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> {
-            var resp = projetController.updateRole("missing@x.com", 12L, ADMIN, "Bearer " + token);
-            assertEquals(404, resp.getStatusCodeValue());
-        });
+        try {
+            projetController.updateRole("missing@x.com", 12L, ADMIN, "Bearer " + token);
+            fail("Expected ResponseStatusException");
+        } catch (ResponseStatusException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+            assertEquals("Utilisateur introuvable", ex.getReason());
+        }
     }
 
    @Test
